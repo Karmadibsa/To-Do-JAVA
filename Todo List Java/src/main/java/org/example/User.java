@@ -8,9 +8,23 @@ public class User {
     private Double id;
     private String firstName;
 
-    public User(String Name) {
+    public User() {
         this.id = (double) counter.incrementAndGet();
-        this.firstName = Name ;
+        this.firstName = "Inconnu" ;
+    }
+
+    public User(String name) {
+        this();
+        this.firstName = name ;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                '}';
     }
 
     public Double getId() {
