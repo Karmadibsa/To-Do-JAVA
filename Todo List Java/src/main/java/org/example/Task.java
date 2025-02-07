@@ -1,8 +1,6 @@
 package org.example;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Task {
     private static AtomicInteger counter = new AtomicInteger();
