@@ -8,15 +8,17 @@ public class User {
 
     private Double id;
     private String firstName;
+    private String lastName;
 
     public User() {
         this.id = (double) counter.incrementAndGet();
         this.firstName = "Inconnu";
     }
 
-    public User(String name) {
+    public User(String firstName, String lastName) {
         this();
-        this.firstName = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     @Override

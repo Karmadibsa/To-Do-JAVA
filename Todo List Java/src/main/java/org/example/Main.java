@@ -6,25 +6,14 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner InputUser = new Scanner(System.in);
+        DataBaseSeeder dbSeeder = new DataBaseSeeder();
+        DataBaseSeeder.seed();
         DataBaseAccess db = DataBaseAccess.getInstance();
-        Task builtTask = new TaskBuilder()
-                .setUserCreated(new User())
-                .setDescription("This is a test")
-                .setTitle("This is a test")
-                .setDone(false)
-                .createTask();
-
-
-
-        System.out.println("Enter your name : ");
-        User user = new User(InputUser.nextLine());
-        db.addUser(user);
-        System.out.println(user);
 
 
         int choiceMenu;
         do {
-            System.out.println("Que voulez vous faire ? 1.Créez une tache 2.Supprimez une tache 3.Modifiez une tache 4.Afficher les taches 5.Quittez ");
+            System.out.println("Que voulez vous faire ? 1.Créez une tache 2.Supprimez une tache 3.Modifiez une tache 4.Afficher les taches 5.Afficher les User 6.Quittez ");
             choiceMenu = Integer.parseInt(InputUser.nextLine());
             switch (choiceMenu) {
                 case 1:
@@ -32,7 +21,7 @@ public class Main {
                     String title = InputUser.nextLine();
                     System.out.println("Enter your description tasks : ");
                     String description = InputUser.nextLine();
-                    Task task = new Task(title, description, user);
+                    Task task = new Task(title, description);
                     db.addTask(task);
                     break;
                 case 2:
@@ -76,6 +65,11 @@ public class Main {
 
                     break;
                 case 5:
+                    db.displayUserList();
+                    System.out.println("Tache Affiché");
+
+                    break;
+                case 6:
                     System.out.println("Au revoir");
                     break;
                 default:
@@ -83,6 +77,6 @@ public class Main {
                     break;
             }
         }
-        while (choiceMenu != 5);
+        while (choiceMenu != 6);
     }
 }

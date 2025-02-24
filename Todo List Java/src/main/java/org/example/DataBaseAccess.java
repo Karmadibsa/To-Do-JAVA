@@ -1,39 +1,16 @@
 package org.example;
 
+import me.xdrop.jrand.JRand;
+import me.xdrop.jrand.generators.person.FirstnameGenerator;
+
 import java.util.*;
 
 public class DataBaseAccess {
 
     private static DataBaseAccess instance;
-    private List<User> userList = new ArrayList<>();
-    private List<Task> taskList = new ArrayList<>();
-
-    public void fillTaskList() {
-        taskList.add(new Task("Faire les courses", "Acheter du lait, des œufs et du pain", userList.get(0)));
-        taskList.add(new Task("Réviser Java", "Travailler sur les collections et les streams", userList.get(1)));
-        taskList.add(new Task("Préparer la réunion", "Rédiger l'ordre du jour et préparer les slides", userList.get(2)));
-        taskList.add(new Task("Faire du sport", "Séance de musculation de 45 minutes", userList.get(3)));
-        taskList.add(new Task("Envoyer les emails", "Répondre aux demandes clients en attente", userList.get(4)));
-        taskList.add(new Task("Regarder un tutoriel", "Apprendre à utiliser GitHub Actions", userList.get(5)));
-        taskList.add(new Task("Planifier les vacances", "Réserver l'hôtel et les billets de train", userList.get(6)));
-    }
-
-    public void fillUserList() {
-        userList.add(new User("Axel"));
-        userList.add(new User("Prisca"));
-        userList.add(new User("Lucas"));
-        userList.add(new User("Victor"));
-        userList.add(new User("Laurent"));
-        userList.add(new User("Stéphane"));
-        userList.add(new User("Steve"));
-        userList.add(new User("Tristan"));
-        userList.add(new User("Hélène"));
-
-    }
+    FirstnameGenerator firstname = JRand.firstname();
 
     private DataBaseAccess() {
-        fillUserList();
-        fillTaskList();
     }
 
     public static DataBaseAccess getInstance() {
@@ -59,6 +36,16 @@ public class DataBaseAccess {
             System.out.println(i + "- " + task.getTitle() + " --- " + task.getDescription());
         }
     }
+
+    public void displayUserList() {
+        System.out.println("Liste des User :");
+        int i = 0;
+        for (User user : userList) {
+            i++; // Incrémente i pour chaque tâche
+            System.out.println(i + "- " + user.getName());
+        }
+    }
+
 
     public Task selectTaskByNumber(int taskNumber) throws ElementNotFoundException {
         // Vérifie si le numéro est valide
