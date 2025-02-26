@@ -1,16 +1,35 @@
 package org.example;
 
-import me.xdrop.jrand.JRand;
-import me.xdrop.jrand.generators.person.FirstnameGenerator;
-
+import java.sql.*;
 import java.util.*;
 
 public class DataBaseAccess {
 
+    private static final String CREATE_TABLE_USERS = "CREATE TABLE USERS (id bigint auto_increment primary key, firstName varchar(255), lastName varchar(255));";
+    private static final String CREATE_TABLE_TASKS = "CREATE TABLE TASKS (id bigint auto_increment primary key, title varchar(255), description varchar(MAX), done boolean, creator_id bigint );";
+    private static final String GET_USERS = "SELECT * FROM USERS ;";
+    private static final String CREATE_USER = "INSERT INTO USERS (firstName, lastName) VALUES (?, ?);";
+    private static final String GET_TASKS = "SELECT * FROM TASKS ;";
+    private static final String CREATE_TASKS = "INSERT INTO TASKS (title, description) VALUES (?, ?);";
+
+
+
     private static DataBaseAccess instance;
-    FirstnameGenerator firstname = JRand.firstname();
+    private Connection connection;
 
     private DataBaseAccess() {
+        try{
+            connection = DriverManager.getConnection("jdbc:h2:mem:db1");
+            createTables();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    private void createTables() throws SQLException {
+        connection.createStatement().executeUpdate(CREATE_TABLE_USERS);
+        connection.createStatement().executeUpdate(CREATE_TABLE_TASKS);
     }
 
     public static DataBaseAccess getInstance() {
@@ -20,58 +39,63 @@ public class DataBaseAccess {
         return instance;
     }
 
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public List<Task> getTaskList() {
-        return taskList;
-    }
-
-    public void displayTaskList() {
-        System.out.println("Liste des tâches :");
-        int i = 0;
-        for (Task task : taskList) {
-            i++; // Incrémente i pour chaque tâche
-            System.out.println(i + "- " + task.getTitle() + " --- " + task.getDescription());
+    public List<User> getUsers() {
+            List<User> users = new ArrayList<>();
+        try {
+            ResultSet resultSet = connection.createStatement().executeQuery(GET_USERS);
+            while (resultSet.next()) {
+                long id = resultSet.getLong(1);
+                String firstName = resultSet.getString(2);
+                String lastName = resultSet.getString(3);
+                User user = new User(id, firstName, lastName);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
+        return users;
     }
 
-    public void displayUserList() {
-        System.out.println("Liste des User :");
-        int i = 0;
-        for (User user : userList) {
-            i++; // Incrémente i pour chaque tâche
-            System.out.println(i + "- " + user.getName());
+    public List<Task> getTasks() {
+        List<Task> tasks = new ArrayList<>();
+        try{
+            ResultSet rs = connection.createStatement().executeQuery(GET_TASKS);
+            while (rs.next()) {
+                Task task = new Task();
+                task.setId(rs.getLong(1));
+                task.setTitle(rs.getString(2));
+                task.setDescription(rs.getString(3));
+                task.setDone(rs.getBoolean(4));
+                tasks.add(task);
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-    }
-
-
-    public Task selectTaskByNumber(int taskNumber) throws ElementNotFoundException {
-        // Vérifie si le numéro est valide
-        if (taskNumber > 0 && taskNumber <= taskList.size()) {
-            Task selectedTask = taskList.get(taskNumber - 1);
-            System.out.println("Tâche sélectionnée : " + selectedTask);
-            return selectedTask;
-        } else {
-            throw new ElementNotFoundException("Numéro de tâche invalide.");
-        }
+        return tasks;
     }
 
     public void addUser(User user) {
-        userList.add(user);
+        try{
+                PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER);
+                preparedStatement.setString(1, user.getFirstName());
+                preparedStatement.setString(2, user.getLastName());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
     }
 
     public void addTask(Task task) {
-        taskList.add(task);
+        try{
+        PreparedStatement preparedStatement = connection.prepareStatement(CREATE_TASKS);
+        preparedStatement.setString(1, task.getTitle());
+        preparedStatement.setString(2, task.getDescription());
+        preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
     }
 
-    public void deleteTask (int task) throws ElementNotFoundException {
-        if (task > 0 && task <= taskList.size()) {
-            taskList.remove(task);
-        } else {
-            throw new ElementNotFoundException("Numéro de tâche invalide.");
-        }
-    }
+
 
 }

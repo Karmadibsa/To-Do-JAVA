@@ -32,7 +32,6 @@ public class TaskBuilder {
         task.setTitle(title);
         task.setDescription(description);
         task.setDone(done);
-        task.setUserCreated(userCreated);
         return task;
     }
 }

@@ -1,89 +1,91 @@
 package org.example;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Task {
-    private static AtomicInteger counter = new AtomicInteger();
 
-    protected Double id;
+    protected Long id;
     protected String title;
     protected String description;
     protected Boolean done;
-    protected User userCreated;
-
+    protected User creator;
 
     public Task() {
-        this.id = (double) counter.incrementAndGet();
-        this.title = "Title unknow";
-        this.description = "Description unknow";
+        this.title = "Titre";
+        this.description = "description";
         this.done = false;
     }
 
-    public Task(String name, String description) {
-        this();
-        this.title = name;
+    public Task(Long id, String title, String description) {
+        this.id = id;
+        this.title = title;
         this.description = description;
         this.done = false;
     }
 
-    public Task(String name, String description, User user) {
-        this();
-        this.title = name;
+    public Task(String title, String description) {
+        this.title = title;
         this.description = description;
         this.done = false;
-        this.userCreated = user;
     }
 
-    public Double getId() {
+
+    public Task(Long id, String title, String description, User creator) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.done = false;
+        this.creator = creator;
+    }
+
+
+
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public Boolean isDone() {
-        return done;
-    }
-
-    public User getUserCreated() {
-        return userCreated;
-    }
-
-    public void setId(Double id) {
-        this.id = id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public Boolean isDone() {
+        return done;
+    }
+
     public void setDone(Boolean done) {
         this.done = done;
     }
 
-    public void setUserCreated(User userCreated) {
-        this.userCreated = userCreated;
+    public User getCreator() {
+        return creator;
     }
 
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 
     @Override
     public String toString() {
-        return "Tasks{" +
+        return "Task{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", done=" + done +
-                ", userCreated=" + userCreated +
+                ", creator =" + creator +
                 '}';
-
     }
 }

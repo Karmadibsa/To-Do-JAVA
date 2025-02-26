@@ -9,9 +9,9 @@ public class DataBaseSeeder {
 
     public static void seed() {
         DataBaseAccess dba = DataBaseAccess.getInstance();
-        List<User> users = generateUsers(100);
+        List<User> users = generateUsers(10);
         users.forEach(dba :: addUser);
-        List<Task> tasks = generateTasks(100);
+        List<Task> tasks = generateTasks(10);
         tasks.forEach(dba :: addTask);
     }
 
