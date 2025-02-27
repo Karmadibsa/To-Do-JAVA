@@ -20,6 +20,10 @@ public class User {
         this.lastName = lastName;
     }
 
+    public User() {
+
+    }
+
     @Override
     public String toString() {
         return "User{" +

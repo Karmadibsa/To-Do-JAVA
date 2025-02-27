@@ -11,7 +11,7 @@ public class DataBaseAccess {
     private static final String CREATE_USER = "INSERT INTO USERS (firstName, lastName) VALUES (?, ?);";
     private static final String GET_TASKS = "SELECT * FROM TASKS ;";
     private static final String CREATE_TASKS = "INSERT INTO TASKS (title, description) VALUES (?, ?);";
-
+    private static final String GET_USER_BY_ID = "SELECT * FROM USERS WHERE id = ?;";
 
 
     private static DataBaseAccess instance;
@@ -94,6 +94,24 @@ public class DataBaseAccess {
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
             }
+    }
+
+    public User getUserById(long id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(GET_USER_BY_ID);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getLong(1));
+                user.setFirstName(resultSet.getString(2));
+                user.setLastName(resultSet.getString(3));
+                return user;
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
 

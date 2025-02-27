@@ -1,7 +1,9 @@
 package org.example;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Request {
 
@@ -9,6 +11,7 @@ public class Request {
     private String path;
     private String protocol;
     private Map<String, String> headers = new HashMap<String, String>();
+    private Map<String, String> params;
 
     public String getMethod() {
         return method;
@@ -23,7 +26,18 @@ public class Request {
     }
 
     public void setPath(String path) {
-        this.path = path;
+        var realPath = path;
+        if (path.contains("?")) {
+            var split = path.split("\\?");
+            realPath = split[0];
+            params = Arrays
+                    .stream(split[1].split("&"))
+                    .map(s -> s.split("="))
+                    .collect(Collectors.toMap(
+                            arr -> arr[0],
+                            arr -> arr[1]));
+        }
+        this.path = realPath;
     }
 
     public String getProtocol() {
@@ -40,5 +54,13 @@ public class Request {
 
     public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
+    }
+
+    public Map<String, String> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
     }
 }
